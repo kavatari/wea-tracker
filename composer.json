@@ -1,0 +1,35 @@
+{
+  "name": "wea/wea-tracker",
+  "description": "Implement econda emos tracking into oxid.",
+  "type": "oxideshop-module",
+  "keywords": [
+    "oxid",
+    "modules",
+    "eShop",
+    "econda",
+    "emos",
+    "google",
+    "analytics"
+  ],
+  "homepage": "http://www.wea-it.com",
+  "license": [
+    "GPL-3.0-only",
+    "proprietary"
+  ],
+  "extra": {
+    "oxideshop": {
+      "blacklist-filter": [
+        "documentation/**/*.*"
+      ],
+      "target-directory": "wea/tracker"
+    }
+  },
+  "require": {
+    "php": ">=5.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "WeaItSolutions\\Oxid\\WeaTracker\\": "../../../source/modules/wea/tracker"
+    }
+  }
+}
