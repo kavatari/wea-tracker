@@ -1,6 +1,6 @@
 {
   "name": "wea/wea-tracker",
-  "description": "Implement econda emos tracking into oxid.",
+  "description": "Econda emos tracking module for oxid esales (CE, PE and EE).",
   "type": "oxideshop-module",
   "keywords": [
     "oxid",
