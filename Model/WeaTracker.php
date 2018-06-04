@@ -210,7 +210,7 @@ class WeaTracker
 
         $sScript = '';
         if ($blDoTrack) {
-            $sScript = '<div style="display:none;">';
+            $sScript = '<div style="display:none;">'; 
 
             // Econda emos3 tracking.
             if ($this->oConfig->getConfigParam('wea_tracker_emos_active') && $this->getEmosFilePath()) {
