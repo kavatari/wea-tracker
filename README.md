@@ -17,6 +17,8 @@ composer require wea/wea-tracker:dev-master
 ```
 
 ### Setup
+#### emos3 lib
+Place your emos3.js library provided by econda into "out/js/emos3.js"
 #### Flow theme templates
 Using flow theme structure the following smarty "block" 
 ```
@@ -31,6 +33,8 @@ has to/can be placed e.g. in the following templates of your theme (if your them
 * **..**
 
 For the full list see [metadata](metadata.php).
+
+P.S.: Do not forget to add yor extended templates to the 'onDeactivate' function to reset template cache. 
 
 #### Non standard theme structure 
 If your theme has a different template structure you have to extend the [metadata](metadata.php) for your needs.

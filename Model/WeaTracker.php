@@ -58,6 +58,11 @@ class WeaTracker
     private $oSmarty;
 
     /**
+     * @var null
+     */
+    private $sEmosLib = null;
+
+    /**
      * EcondaTracker constructor.
      */
     public function __construct()
@@ -74,11 +79,21 @@ class WeaTracker
      */
     protected function getEmosFilePath()
     {
-        $sFile = 'emos.js';
-        if($sTmpFile = $this->oConfig->getConfigParam('wea_tracker_emos_file')){
-            $sFile = $sTmpFile;
+        if ($this->sEmosLib == null) {
+            $sFile = 'emos3.js';
+            if ($sTmpFile = $this->oConfig->getConfigParam('wea_tracker_emos_file')) {
+                $sFile = $sTmpFile;
+            }
+            $sFileToLoad = $this->oViewConfig->getModuleUrl('wea_tracker', 'out/js/' . $sFile);
+
+            if (empty($sFileToLoad)) {
+                Registry::getUtils()->writeToLog("Emos lib not found: " . $sFile, "wea-tracker.log");
+            } else {
+                $this->sEmosLib = $sFileToLoad;
+            }
         }
-        return $this->oViewConfig->getModuleUrl('wea_tracker', 'out/js/'.$sFile);
+
+        return $this->sEmosLib;
     }
 
     /**
@@ -172,33 +187,33 @@ class WeaTracker
 
         $iTrackingOption = $this->oConfig->getConfigParam('wea_tracker_general_opt');
         $blDoTrack = true;
-        if($iTrackingOption){
+        if ($iTrackingOption) {
             $blDoTrack = false;
-            if($iTrackingOption == 0){
+            if ($iTrackingOption == 0) {
                 // No GDPR tracking settings. Track all users.
                 $blDoTrack = true;
-            }else if($iTrackingOption == 1){
+            } else if ($iTrackingOption == 1) {
                 // Check for opt-in and track users with opt-in cookie only.
                 $iTracking = Registry::getUtilsServer()->getOxCookie('wea_tracking_optin');
-                if($iTracking && $iTracking == 1){
+                if ($iTracking && $iTracking == 1) {
                     $blDoTrack = true;
                 }
-            }else if($iTrackingOption == 2){
+            } else if ($iTrackingOption == 2) {
                 // Check for opt-out. Do not track when there is an opt-out cookie.
                 $blDoTrack = true;
                 $iTracking = Registry::getUtilsServer()->getOxCookie('wea_tracking_optout');
-                if($iTracking && $iTracking == 1){
+                if ($iTracking && $iTracking == 1) {
                     $blDoTrack = false;
                 }
             }
         }
 
         $sScript = '';
-        if($blDoTrack){
+        if ($blDoTrack) {
             $sScript = '<div style="display:none;">';
 
             // Econda emos3 tracking.
-            if($this->oConfig->getConfigParam('wea_tracker_emos_active')){
+            if ($this->oConfig->getConfigParam('wea_tracker_emos_active') && $this->getEmosFilePath()) {
                 // Generate js script.
                 $sScript .= '<script>if( typeof(window.emos3) === "undefined" ) { window.emos3 = { stored : [], send : function(p){this.stored.push(p);} }; }</script>';
                 $sScript .= '<script src="' . $this->getEmosFilePath() . '" async="async"></script>';
@@ -220,7 +235,7 @@ class WeaTracker
 
             $sScript .= '</div>';
         }
-        
+
         return $sScript;
     }
 }

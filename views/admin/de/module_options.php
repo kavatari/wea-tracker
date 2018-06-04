@@ -39,5 +39,7 @@ $aLang = array(
     'SHOP_MODULE_wea_tracker_emos_file' => 'Emos-Bibliothek Dateiname (z. B. emos3.js)',
 
     'SHOP_MODULE_GROUP_wea_tracker_gtag' => 'Google - Analytics',
-    'SHOP_MODULE_wea_tracker_gtag_active' => 'In Arbeit (WIP)',
+    'SHOP_MODULE_wea_tracker_gtag_active' => 'Aktiv?',
+    'SHOP_MODULE_wea_tracker_gtag_analytics' => 'Analytics Account ID',
+    'HELP_SHOP_MODULE_wea_tracker_gtag_analytics' => 'In der Form: UA-xxxxxxxx-x',
 );
