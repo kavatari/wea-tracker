@@ -44,5 +44,10 @@ class Search extends Search_parent
         return $aEmos;
     }
 
-
+    public function getGtagOptions(&$aOptions)
+    {
+        $oRequest = Registry::getRequest();
+        $aOptions['page_path'] = 'Shopping/Search/' . $oRequest->getRequestParameter('searchparam', true);
+        return $aOptions;
+    }
 }

@@ -42,4 +42,6 @@ $aLang = array(
     'SHOP_MODULE_wea_tracker_gtag_active' => 'Aktiv?',
     'SHOP_MODULE_wea_tracker_gtag_analytics' => 'Analytics Account ID',
     'HELP_SHOP_MODULE_wea_tracker_gtag_analytics' => 'In der Form: UA-xxxxxxxx-x',
+    'SHOP_MODULE_wea_tracker_gtag_anonymizeip' => 'IP anonymisieren',
+    'HELP_SHOP_MODULE_wea_tracker_gtag_anonymizeip' => 'Wenn aktiv, dann wird die IP bei Google Analytics anonymisiert.',
 );
