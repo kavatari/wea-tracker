@@ -213,6 +213,11 @@ $aModule = array(
         array(
             'group' => 'wea_tracker_gtag',
             'name' => 'wea_tracker_gtag_analytics',
+            'type' => 'str',
+        ),
+        array(
+            'group' => 'wea_tracker_gtag',
+            'name' => 'wea_tracker_gtag_anonymizeip',
             'type' => 'bool',
         ),
     ),

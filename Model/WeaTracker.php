@@ -210,7 +210,7 @@ class WeaTracker
 
         $sScript = '';
         if ($blDoTrack) {
-            $sScript = '<div style="display:none;">'; 
+            $sScript = '<div style="display:none;">';
 
             // Econda emos3 tracking.
             if ($this->oConfig->getConfigParam('wea_tracker_emos_active') && $this->getEmosFilePath()) {
@@ -231,7 +231,24 @@ class WeaTracker
                 $sScript .= '}catch(e){}</script>';
             }
 
-            // TODO Google GTag tracking.
+            $sGaAccount = $this->oConfig->getConfigParam('wea_tracker_gtag_analytics');
+            // Google analytics tracking.
+            if ($this->oConfig->getConfigParam('wea_tracker_gtag_active') && !empty($sGaAccount)) {
+                $sScript .= '<script src="https://www.googletagmanager.com/gtag/js?id=' . $sGaAccount . '"></script>';
+                $sScript .= '<script>';
+                $sScript .= 'window.dataLayer = window.dataLayer || [];';
+                $sScript .= 'function gtag() {dataLayer.push(arguments);}';
+
+                $aGtagOptions = array();
+                // Prepare gtag options object.
+                if ($this->oConfig->getConfigParam('wea_tracker_gtag_anonymizeip')) {
+                    $aGtagOptions['anonymize_ip'] = true;
+                }
+
+                $sScript .= 'gtag(\'js\', new Date());';
+                $sScript .= 'gtag(\'config\', ' . $sGaAccount . ', ' . json_encode($aGtagOptions) . ');';
+                $sScript .= '</script>';
+            }
 
             $sScript .= '</div>';
         }
