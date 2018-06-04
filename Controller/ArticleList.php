@@ -26,17 +26,38 @@ use \OxidEsales\Eshop\Core\Registry;
 
 class ArticleList extends ArticleList_parent
 {
+    protected $aTrackingBreadCrumbs = null;
+
     public function getEmosCode(&$aEmos)
     {
-        $aCatTitle = [];
-        if ($aCatPath = $this->getBreadCrumb()) {
-            foreach ($aCatPath as $aCatPathParts) {
-                $aCatTitle[] = $aCatPathParts['title'];
-            }
-        }
-
-        $aEmos['content'] = 'Shopping/'.(count($aCatTitle) ? strip_tags(implode('/', $aCatTitle)) : 'NULL');
+        $aCatTitle = $this->getBreadCrumbsTitle();
+        $aEmos['content'] = 'Shopping/' . (count($aCatTitle) ? strip_tags(implode('/', $aCatTitle)) : 'NULL');
 
         return $aEmos;
+    }
+
+    public function getGtagOptions(&$aOptions)
+    {
+        $aCatTitle = $this->getBreadCrumbsTitle();
+        if(count($aCatTitle)){
+            $aOptions['page_path'] = 'Shopping/' . strip_tags(implode('/', $aCatTitle));
+        }
+        return $aOptions;
+    }
+
+    protected function getBreadCrumbsTitle()
+    {
+        if($this->aTrackingBreadCrumbs === null){
+            $aCatTitle = [];
+            if ($aCatPath = $this->getBreadCrumb()) {
+                foreach ($aCatPath as $aCatPathParts) {
+                    $aCatTitle[] = $aCatPathParts['title'];
+                }
+            }
+
+            $this->aTrackingBreadCrumbs = $aCatTitle;
+        }
+
+        return $this->aTrackingBreadCrumbs;
     }
 }

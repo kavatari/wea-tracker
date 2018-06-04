@@ -245,6 +245,11 @@ class WeaTracker
                     $aGtagOptions['anonymize_ip'] = true;
                 }
 
+                // Dynamic code generation using the current controller.
+                if (method_exists($this->getCurrentController(), 'getGtagOptions')) {
+                    $this->getCurrentController()->getGtagOptions($aGtagOptions);
+                }
+
                 $sScript .= 'gtag(\'js\', new Date());';
                 $sScript .= 'gtag(\'config\', ' . $sGaAccount . ', ' . json_encode($aGtagOptions) . ');';
                 $sScript .= '</script>';
