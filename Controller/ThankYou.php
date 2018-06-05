@@ -18,6 +18,7 @@
  * @link http://www.wea-it.com
  * @copyright (C) WEA IT-Solutions 2018
  */
+
 namespace WeaItSolutions\Oxid\WeaTracker\Controller;
 
 use \OxidEsales\Eshop\Core\Config;
@@ -40,9 +41,9 @@ class ThankYou extends ThankYou_parent
         $sCity = $oOrder->oxorder__oxbillcity->value;
 
         $sPlace = $sCountry;
-        $sPlace .= '/'.$oStr->substr($sZip, 0, 1)."/".$oStr->substr($sZip, 0, 2)."/";
-        $sPlace .= '/'.$sCity;
-        $sPlace .= '/'.$sZip;
+        $sPlace .= '/' . $oStr->substr($sZip, 0, 1) . "/" . $oStr->substr($sZip, 0, 2) . "/";
+        $sPlace .= '/' . $sCity;
+        $sPlace .= '/' . $sZip;
 
         $aBilling = [
             $oOrder->oxorder__oxordernr->value,
@@ -68,6 +69,43 @@ class ThankYou extends ThankYou_parent
         $aEmos['orderProcess'] = '5_OrderConfirmation';
         $aEmos['billing'] = [$aBilling];
         $aEmos['ec_Event'] = $aBasket;
+
+        if ($this->getConfig()->getConfigParam('wea_tracker_emos_extorder')) {
+            // Credit card type.
+            $sCcType = 'n.a.';
+            // Payment type.
+            $sPaymentType = $oOrder->oxorder__oxpaymenttype->value;
+            try {
+                $oPayment = oxNew('oxPayment');
+                if ($oPayment->load($sPaymentType)) {
+                    $sPaymentType = $oPayment->oxpayments__oxdesc->value;
+                }
+            } catch (Exception $ex) {
+            }
+            // Delivery info.
+            $sDelSet = ($oOrder->oxorder__oxdeltype->value && !empty($oOrder->oxorder__oxdeltype->value) ? $oOrder->oxorder__oxdeltype->value : 'n.a.');
+            try {
+                $oDelivery = oxNew('oxDeliverySet');
+                if ($oDelivery->load($sDelSet)) {
+                    $sDelSet = $oDelivery->oxdeliveryset__oxtitle->value;
+                }
+            } catch (Exception $ex) {
+            }
+
+            $fDelPrice = $oOrder->getOrderDeliveryPrice()->getPrice();
+            // Customer type.
+            $sUserType = 'Guest';
+            if ($oUser && $oUser->hasAccount()) {
+                $sUserType = 'NewCustomer';
+                if ($oUser->getOrderCount() > 1) {
+                    $sUserType = 'RegularCustomer';
+                }
+            }
+            // Exended billing informations.
+            $aEmos['billext'] = array(array(
+                $sPaymentType, $sDelSet, $fDelPrice, $sUserType, $sCcType,
+            ));
+        }
 
         return $aEmos;
     }

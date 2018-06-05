@@ -37,6 +37,8 @@ $aLang = array(
     'SHOP_MODULE_GROUP_wea_tracker_emos' => 'Econda - Emos Tracker',
     'SHOP_MODULE_wea_tracker_emos_active' => 'Aktiv?',
     'SHOP_MODULE_wea_tracker_emos_file' => 'Emos-Bibliothek Dateiname (z. B. emos3.js)',
+    'SHOP_MODULE_wea_tracker_emos_extorder' => 'Erweiterte Bestellinformationen',
+    'HELP_SHOP_MODULE_wea_tracker_emos_extorder' => 'Erweiterte Bestellinformationen tracken, siehe <a href="https://support.econda.de/pages/viewpage.action?pageId=4751506" target="_blank">Econda Dokumentation</a>',
 
     'SHOP_MODULE_GROUP_wea_tracker_gtag' => 'Google - Analytics',
     'SHOP_MODULE_wea_tracker_gtag_active' => 'Aktiv?',
