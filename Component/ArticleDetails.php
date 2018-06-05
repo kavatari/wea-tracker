@@ -49,4 +49,20 @@ class ArticleDetails extends ArticleDetails_parent
     {
         return $this->getProduct()->getEmosItem()->toEmosArray($sType);
     }
+
+    public function getGoogleTagEvents(&$aGoogleTagEvents)
+    {
+        $oCur = $this->getConfig()->getActShopCurrencyObject();
+        $oProduct = $this->getProduct();
+
+        $aGoogleTagEvents['view_item'] = [
+            'items' => [['id' => $oProduct->getTrackingProductNumber(),
+                'name' => $oProduct->getTrackingProductName(),
+                'brand' => $oProduct->getVendor() ? $oProduct->getVendor()->getTitle() : "n.a.",
+                'price' => $oProduct->getPrice()->getBruttoPrice() * (1 / $oCur->rate),
+                'category' => $oProduct->getEmosContent()]]
+        ];
+
+        return $aGoogleTagEvents;
+    }
 }

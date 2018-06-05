@@ -70,7 +70,7 @@ class Article extends Article_parent
         return $oGoogleItem;
     }
 
-    protected function getTrackingProductName()
+    public function getTrackingProductName()
     {
         $sTitle = $this->oxarticles__oxtitle->value;
         if ($this->oxarticles__oxvarselect->value) {
@@ -85,7 +85,7 @@ class Article extends Article_parent
      *
      * @return string
      */
-    protected function getTrackingProductNumber()
+    public function getTrackingProductNumber()
     {
         $sProductNumber = '';
         $oConfig = Registry::getConfig();

@@ -29,6 +29,11 @@ class ThankYou extends ThankYou_parent
 {
     protected $aBasketProducts = null;
 
+    /**
+     * Loads and returns an product array.
+     *
+     * @return array|null
+     */
     protected function getBasketProducts()
     {
         if ($this->aBasketProducts === null) {
@@ -100,9 +105,11 @@ class ThankYou extends ThankYou_parent
             // Delivery info.
             $sDelSet = ($oOrder->oxorder__oxdeltype->value && !empty($oOrder->oxorder__oxdeltype->value) ? $oOrder->oxorder__oxdeltype->value : 'n.a.');
             try {
-                $oDelivery = oxNew('oxDeliverySet');
-                if ($oDelivery->load($sDelSet)) {
-                    $sDelSet = $oDelivery->oxdeliveryset__oxtitle->value;
+                if ($sDelSet !== 'n.a.') {
+                    $oDelivery = oxNew('oxDeliverySet');
+                    if ($oDelivery->load($sDelSet)) {
+                        $sDelSet = $oDelivery->oxdeliveryset__oxtitle->value;
+                    }
                 }
             } catch (Exception $ex) {
             }
@@ -116,7 +123,7 @@ class ThankYou extends ThankYou_parent
                     $sUserType = 'RegularCustomer';
                 }
             }
-            // Exended billing informations.
+            // Extended billing information.
             $aEmos['billext'] = array(array(
                 $sPaymentType, $sDelSet, $fDelPrice, $sUserType, $sCcType,
             ));

@@ -4,11 +4,13 @@ OXID Tracker by WEA IT-Solutions
 ![WEA IT-Solutions OXID Tracker](wea-it-solutions.png)
 
 This is an oxid 6 module implementing [econda](https://www.econda.de) tracking (emos3).
-### Module settings
+### Module settings and possibilities
 Using the backend you can configure some settings. 
 * GDPR settings to Opt-in or Opt-out for econda tracking.
-* Use your own name for the emos library.
+* Use your own name for the emos javascript library file.
 * Use either "oxarticles.oxid" or "oxarticles.oxartnum" to track the product number.
+* Econda extended order tracking using econda's data model template.
+* Google Analytics enhanced ecommerce tracking for orders and product views.
 
 ### Module installation via composer
 In order to install this module using composer run the following command in your shop base directory where the shop's composer.json is placed.
