@@ -203,7 +203,12 @@ $aModule = array(
             'group' => 'wea_tracker_emos',
             'name' => 'wea_tracker_emos_file',
             'type' => 'str',
-            'value' => 'emos.js'
+            'value' => 'emos3.js'
+        ),
+        array(
+            'group' => 'wea_tracker_emos',
+            'name' => 'wea_tracker_emos_extorder',
+            'type' => 'bool',
         ),
         array(
             'group' => 'wea_tracker_gtag',
