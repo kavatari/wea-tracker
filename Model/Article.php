@@ -43,11 +43,7 @@ class Article extends Article_parent
         $oEmosItem = oxNew(\WeaItSolutions\Oxid\WeaTracker\Model\EmosItem::class);
         $oEmosItem->sProductId = $this->getTrackingProductNumber();
 
-        $sTitle = $this->oxarticles__oxtitle->value;
-        if ($this->oxarticles__oxvarselect->value) {
-            $sTitle .= " " . $this->oxarticles__oxvarselect->value;
-        }
-        $oEmosItem->sProductName = $sTitle;
+        $oEmosItem->sProductName = $this->getTrackingProductNumber();
 
         $oCur = $this->getConfig()->getActShopCurrencyObject();
         $oEmosItem->dPrice = $this->getPrice()->getBruttoPrice() * (1 / $oCur->rate);
@@ -60,6 +56,30 @@ class Article extends Article_parent
         return $oEmosItem;
     }
 
+    public function getGoogleItem($iQuantity = 1)
+    {
+        $oCur = $this->getConfig()->getActShopCurrencyObject();
+        /* @var $oGoogleItem GoogleItem */
+        $oGoogleItem = oxNew(\WeaItSolutions\Oxid\WeaTracker\Model\GoogleItem::class);
+        $oGoogleItem->id = $this->getTrackingProductNumber();
+        $oGoogleItem->name = $this->getTrackingProductName();
+        $oGoogleItem->category = $this->getEmosContent();
+        $oGoogleItem->price = $this->getPrice()->getBruttoPrice() * (1 / $oCur->rate);
+        $oGoogleItem->quantity = $iQuantity;
+
+        return $oGoogleItem;
+    }
+
+    protected function getTrackingProductName()
+    {
+        $sTitle = $this->oxarticles__oxtitle->value;
+        if ($this->oxarticles__oxvarselect->value) {
+            $sTitle .= " " . $this->oxarticles__oxvarselect->value;
+        }
+
+        return $sTitle;
+    }
+
     /**
      * Returns the preferred product tracking id.
      *
@@ -70,13 +90,13 @@ class Article extends Article_parent
         $sProductNumber = '';
         $oConfig = Registry::getConfig();
         $iCol = 0;
-        if($iTmpCol = $oConfig->getConfigParam('wea_tracker_general_artnum')){
+        if ($iTmpCol = $oConfig->getConfigParam('wea_tracker_general_artnum')) {
             $iCol = $iTmpCol;
         }
 
-        if($iCol == 1){
+        if ($iCol == 1) {
             $sProductNumber = (isset($this->oxarticles__oxartnum->value) && $this->oxarticles__oxartnum->value) ? $this->oxarticles__oxartnum->value : $this->getId();
-        }else{
+        } else {
             $sProductNumber = $this->getId();
         }
 

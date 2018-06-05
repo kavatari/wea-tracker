@@ -46,4 +46,6 @@ $aLang = array(
     'HELP_SHOP_MODULE_wea_tracker_gtag_analytics' => 'In der Form: UA-xxxxxxxx-x',
     'SHOP_MODULE_wea_tracker_gtag_anonymizeip' => 'IP anonymisieren',
     'HELP_SHOP_MODULE_wea_tracker_gtag_anonymizeip' => 'Wenn aktiv, dann wird die IP bei Google Analytics anonymisiert.',
+    'SHOP_MODULE_wea_tracker_gtag_ecommerce' => 'Google Analytics Enhanced Ecommerce Tracking aktivieren',
+    'HELP_SHOP_MODULE_wea_tracker_gtag_ecommerce' => '<a href="https://developers.google.com/tag-manager/enhanced-ecommerce" target="_blank">Google Enhanced Ecommerce</a>',
 );

@@ -225,5 +225,10 @@ $aModule = array(
             'name' => 'wea_tracker_gtag_anonymizeip',
             'type' => 'bool',
         ),
+        array(
+            'group' => 'wea_tracker_gtag',
+            'name' => 'wea_tracker_gtag_ecommerce',
+            'type' => 'bool',
+        ),
     ),
 );

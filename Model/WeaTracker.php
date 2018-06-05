@@ -234,6 +234,7 @@ class WeaTracker
             $sGaAccount = $this->oConfig->getConfigParam('wea_tracker_gtag_analytics');
             // Google analytics tracking.
             if ($this->oConfig->getConfigParam('wea_tracker_gtag_active') && !empty($sGaAccount)) {
+                $aGoogleTagEvents = array();
                 $sScript .= '<script src="https://www.googletagmanager.com/gtag/js?id=' . $sGaAccount . '"></script>';
                 $sScript .= '<script>';
                 $sScript .= 'window.dataLayer = window.dataLayer || [];';
@@ -252,6 +253,19 @@ class WeaTracker
 
                 $sScript .= 'gtag(\'js\', new Date());';
                 $sScript .= 'gtag(\'config\', ' . $sGaAccount . ', ' . json_encode($aGtagOptions) . ');';
+
+                if($this->oConfig->getConfigParam('wea_tracker_gtag_ecommerce')){
+                    if (method_exists($this->getCurrentController(), 'getGoogleTagEvents')) {
+                        $this->getCurrentController()->getGoogleTagEvents($aGoogleTagEvents);
+                    }
+
+                    if(count($aGoogleTagEvents) > 0){
+                        foreach ($aGoogleTagEvents as $key => $value){
+                            $sScript .= 'gtag(\'event\', \''.$key.'\', '.json_encode($value).')';
+                        }
+                    }
+                }
+
                 $sScript .= '</script>';
             }
 

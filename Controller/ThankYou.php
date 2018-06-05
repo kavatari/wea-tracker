@@ -27,6 +27,29 @@ use OxidEsales\Eshop\Core\Str;
 
 class ThankYou extends ThankYou_parent
 {
+    protected $aBasketProducts = null;
+
+    protected function getBasketProducts()
+    {
+        if ($this->aBasketProducts === null) {
+            $this->aBasketProducts = [];
+            $oBasket = $this->getBasket();
+            $aBasketProducts = $oBasket->getContents();
+            foreach ($aBasketProducts as $oContent) {
+                /** @var \OxidEsales\Eshop\Application\Model\BasketItem $oContent */
+                $sId = $oContent->getProductId();
+
+                /** @var \OxidEsales\Eshop\Application\Model\Article $oProduct */
+                $oProduct = oxNew(\OxidEsales\Eshop\Application\Model\Article::class);
+                $oProduct->load($sId);
+
+                $this->aBasketProducts[] = ['product' => $oProduct, 'amount' => $oContent->getAmount()];
+            }
+        }
+
+        return $this->aBasketProducts;
+    }
+
     public function getEmosCode(&$aEmos)
     {
         $oCur = $this->getConfig()->getActShopCurrencyObject();
@@ -53,16 +76,8 @@ class ThankYou extends ThankYou_parent
         ];
 
         $aBasket = [];
-        $aBasketProducts = $oBasket->getContents();
-        foreach ($aBasketProducts as $oContent) {
-            /** @var \OxidEsales\Eshop\Application\Model\BasketItem $oContent */
-            $sId = $oContent->getProductId();
-
-            /** @var \OxidEsales\Eshop\Application\Model\Article $oProduct */
-            $oProduct = oxNew(\OxidEsales\Eshop\Application\Model\Article::class);
-            $oProduct->load($sId);
-
-            $aBasket[] = $oProduct->getEmosItem($oContent->getAmount())->toEmosArray('buy');
+        foreach ($this->getBasketProducts() as $aProdData) {
+            $aBasket[] = $aProdData['product']->getEmosItem($aProdData['amount'])->toEmosArray('buy');
         }
 
         $aEmos['content'] = 'Shopping/Checkout/OrderConfirmation';
@@ -108,5 +123,29 @@ class ThankYou extends ThankYou_parent
         }
 
         return $aEmos;
+    }
+
+    public function getGoogleTagEvents(&$aGoogleTagEvents)
+    {
+        $oOrder = $this->getOrder();
+        $oBasket = $this->getBasket();
+        $oCur = $this->getConfig()->getActShopCurrencyObject();
+
+        $aBasket = [];
+        foreach ($this->getBasketProducts() as $aProdData) {
+            $aBasket[] = $aProdData['product']->getGoogleItem($aProdData['amount'])->toArray();
+        }
+
+        $aGoogleTagEvents['purchase'] = [
+            'transaction_id' => $oOrder->oxorder__oxordernr->value,
+            'shipping' => $oOrder->oxorder__oxdelcost->value,
+            'value' => $oBasket->getPrice()->getBruttoPrice() * (1 / $oCur->rate),
+            'items' => $aBasket,
+            'affiliation' => '',
+            'tax' => $oOrder->oxorder__oxartvatprice1->value,
+            'currency' => $oOrder->oxorder__oxcurrency->value
+        ];
+
+        return $aGoogleTagEvents;
     }
 }
