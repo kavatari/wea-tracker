@@ -90,7 +90,8 @@ class ThankYou extends ThankYou_parent
         $aEmos['billing'] = [$aBilling];
         $aEmos['ec_Event'] = $aBasket;
 
-        if ($this->getConfig()->getConfigParam('wea_tracker_emos_extorder')) {
+        $sEventName = $this->getConfig()->getConfigParam('wea_tracker_emos_extorderevent');
+        if ($this->getConfig()->getConfigParam('wea_tracker_emos_extorder') && $sEventName) {
             // Credit card type.
             $sCcType = 'n.a.';
             // Payment type.
@@ -123,8 +124,9 @@ class ThankYou extends ThankYou_parent
                     $sUserType = 'RegularCustomer';
                 }
             }
+
             // Extended billing information.
-            $aEmos['billext'] = array(array(
+            $aEmos[$sEventName] = array(array(
                 $sPaymentType, $sDelSet, $fDelPrice, $sUserType, $sCcType,
             ));
         }

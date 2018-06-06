@@ -211,6 +211,12 @@ $aModule = array(
             'type' => 'bool',
         ),
         array(
+            'group' => 'wea_tracker_emos',
+            'name' => 'wea_tracker_emos_extorderevent',
+            'type' => 'str',
+            'value' => 'billext'
+        ),
+        array(
             'group' => 'wea_tracker_gtag',
             'name' => 'wea_tracker_gtag_active',
             'type' => 'bool',
