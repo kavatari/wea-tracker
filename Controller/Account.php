@@ -26,13 +26,31 @@ use \OxidEsales\Eshop\Core\Registry;
 
 class Account extends Account_parent
 {
+    /**
+     * If google or econda tracking is active,
+     * do not use oxusername in title tag.
+     * see: GDPR law.
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        if (($this->getConfig()->getConfigParam('wea_tracker_emos_active') || $this->getConfig()->getConfigParam('wea_tracker_gtag_active'))
+            && $this->getConfig()->getActiveView()->getClassName() == 'account') {
+            $baseLanguageId = \OxidEsales\Eshop\Core\Registry::getLang()->getBaseLanguage();
+            return \OxidEsales\Eshop\Core\Registry::getLang()->translateString('PAGE_TITLE_ACCOUNT', $baseLanguageId, false);
+        }
+
+        return parent::getTitle();
+    }
+
     public function getEmosCode(&$aEmos)
     {
         $oRequest = Registry::getRequest();
 
         if ($this->getUser()) {
             $aEmos['content'] = 'Account/Overview';
-        }else {
+        } else {
             $aEmos['content'] = ($this->getFncName() === 'logout' ? 'Account/Form/SignOut' : 'Account/Form/SignIn');
         }
 
