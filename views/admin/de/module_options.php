@@ -50,4 +50,6 @@ $aLang = array(
     'HELP_SHOP_MODULE_wea_tracker_gtag_anonymizeip' => 'Wenn aktiv, dann wird die IP bei Google Analytics anonymisiert.',
     'SHOP_MODULE_wea_tracker_gtag_ecommerce' => 'Google Analytics Enhanced Ecommerce Tracking aktivieren',
     'HELP_SHOP_MODULE_wea_tracker_gtag_ecommerce' => '<a href="https://developers.google.com/tag-manager/enhanced-ecommerce" target="_blank">Google Enhanced Ecommerce</a>',
+    'SHOP_MODULE_wea_tracker_gtag_adwords' => 'Google Adwords Account.',
+    'HELP_SHOP_MODULE_wea_tracker_gtag_adwords' => 'Durch das Eintragen eines Adwords-Kontos (in der Form: AW-xxxxxxx/xxxxxxxxx) werden auch Konversionen an das Adwords-Konto übermittelt. ',
 );

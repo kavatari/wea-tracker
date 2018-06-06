@@ -140,20 +140,32 @@ class ThankYou extends ThankYou_parent
         $oBasket = $this->getBasket();
         $oCur = $this->getConfig()->getActShopCurrencyObject();
 
-        $aBasket = [];
-        foreach ($this->getBasketProducts() as $aProdData) {
-            $aBasket[] = $aProdData['product']->getGoogleItem($aProdData['amount'])->toArray();
+        if($this->getConfig()->getConfigParam('wea_tracker_gtag_ecommerce')){
+            $aBasket = [];
+            foreach ($this->getBasketProducts() as $aProdData) {
+                $aBasket[] = $aProdData['product']->getGoogleItem($aProdData['amount'])->toArray();
+            }
+
+            $aGoogleTagEvents['purchase'] = [
+                'transaction_id' => $oOrder->oxorder__oxordernr->value,
+                'shipping' => $oOrder->oxorder__oxdelcost->value,
+                'value' => $oBasket->getPrice()->getBruttoPrice() * (1 / $oCur->rate),
+                'items' => $aBasket,
+                'affiliation' => '',
+                'tax' => $oOrder->oxorder__oxartvatprice1->value,
+                'currency' => $oOrder->oxorder__oxcurrency->value
+            ];
         }
 
-        $aGoogleTagEvents['purchase'] = [
-            'transaction_id' => $oOrder->oxorder__oxordernr->value,
-            'shipping' => $oOrder->oxorder__oxdelcost->value,
-            'value' => $oBasket->getPrice()->getBruttoPrice() * (1 / $oCur->rate),
-            'items' => $aBasket,
-            'affiliation' => '',
-            'tax' => $oOrder->oxorder__oxartvatprice1->value,
-            'currency' => $oOrder->oxorder__oxcurrency->value
-        ];
+        $sAdwordAcoount = $this->getConfig()->getConfigParam('wea_tracker_gtag_adwords');
+        if(!empty($sAdwordAcoount)){
+            $aGoogleTagEvents['conversion'] = [
+                'send_to' => $sAdwordAcoount,
+                'value' => $oBasket->getPrice()->getBruttoPrice() * (1 / $oCur->rate),
+                'currency' => $oOrder->oxorder__oxcurrency->value,
+                'transaction_id' => $oOrder->oxorder__oxordernr->value,
+            ];
+        }
 
         return $aGoogleTagEvents;
     }
