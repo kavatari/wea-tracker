@@ -81,7 +81,7 @@ class WeaTracker
     {
         if ($this->sEmosLib == null) {
             $sFile = 'emos3.js';
-            if ($sTmpFile = $this->oConfig->getConfigParam('wea_tracker_emos_file')) {
+            if ($sTmpFile = $this->getConfig()->getConfigParam('wea_tracker_emos_file')) {
                 $sFile = $sTmpFile;
             }
             $sFileToLoad = $this->oViewConfig->getModuleUrl('wea_tracker', 'out/js/' . $sFile);
@@ -103,7 +103,7 @@ class WeaTracker
      */
     protected function getCurrentController()
     {
-        return $this->oConfig->getActiveView();
+        return $this->getConfig()->getActiveView();
     }
 
     /**
@@ -127,7 +127,7 @@ class WeaTracker
      */
     protected function getSiteId()
     {
-        return $this->oConfig->getShopId();
+        return $this->getConfig()->getShopId();
     }
 
     /**
@@ -173,6 +173,15 @@ class WeaTracker
     }
 
     /**
+     * Returns the config.
+     *
+     * @return Config
+     */
+    protected function getConfig(){
+        return $this->oConfig;
+    }
+
+    /**
      * Returns the tracking code for econda and google gtag.
      * @param $aParams
      * @param $oSmarty
@@ -185,7 +194,7 @@ class WeaTracker
         $this->oSmarty = $oSmarty;
         $this->aParams = $aParams;
 
-        $iTrackingOption = $this->oConfig->getConfigParam('wea_tracker_general_opt');
+        $iTrackingOption = $this->getConfig()->getConfigParam('wea_tracker_general_opt');
         $blDoTrack = true;
         if ($iTrackingOption) {
             $blDoTrack = false;
@@ -213,7 +222,7 @@ class WeaTracker
             $sScript = '<div style="display:none;">';
 
             // Econda emos3 tracking.
-            if ($this->oConfig->getConfigParam('wea_tracker_emos_active') && $this->getEmosFilePath()) {
+            if ($this->getConfig()->getConfigParam('wea_tracker_emos_active') && $this->getEmosFilePath()) {
                 // Generate js script.
                 $sScript .= '<script>window.emos3 = { stored : [], send : function(p){this.stored.push(p);} };</script>';
                 $sScript .= '<script src="' . $this->getEmosFilePath() . '" async="async"></script>';
@@ -231,9 +240,9 @@ class WeaTracker
                 $sScript .= '}catch(e){}</script>';
             }
 
-            $sGaAccount = $this->oConfig->getConfigParam('wea_tracker_gtag_analytics');
+            $sGaAccount = $this->getConfig()->getConfigParam('wea_tracker_gtag_analytics');
             // Google analytics tracking.
-            if ($this->oConfig->getConfigParam('wea_tracker_gtag_active') && !empty($sGaAccount)) {
+            if ($this->getConfig()->getConfigParam('wea_tracker_gtag_active') && !empty($sGaAccount)) {
                 $aGoogleTagEvents = array();
                 $sScript .= '<script src="https://www.googletagmanager.com/gtag/js?id=' . $sGaAccount . '"></script>';
                 $sScript .= '<script>';
@@ -242,7 +251,7 @@ class WeaTracker
 
                 $aGtagOptions = array();
                 // Prepare gtag options object.
-                if ($this->oConfig->getConfigParam('wea_tracker_gtag_anonymizeip')) {
+                if ($this->getConfig()->getConfigParam('wea_tracker_gtag_anonymizeip')) {
                     $aGtagOptions['anonymize_ip'] = true;
                 }
 
@@ -252,8 +261,18 @@ class WeaTracker
                 }
 
                 $sScript .= 'gtag(\'js\', new Date());';
-                $sScript .= 'gtag(\'config\', ' . $sGaAccount . ', ' . json_encode($aGtagOptions) . ');';
+                $sScript .= 'gtag(\'config\', \'' . $sGaAccount . '\', ' . json_encode($aGtagOptions) . ');';
 
+                // Configure adwords account if one is given.
+                $sAdwordAcoount = $this->getConfig()->getConfigParam('wea_tracker_gtag_adwords');
+                if(!empty($sAdwordAcoount)){
+                    $aAdwords = explode('/', $sAdwordAcoount);
+                    if(count($aAdwords) > 0){
+                        $sScript .= 'gtag(\'config\', \'' . $aAdwords[0] . '\', ' . json_encode($aGtagOptions) . ');';
+                    }
+                }
+
+                // Get additional tag events from current controller.
                 if (method_exists($this->getCurrentController(), 'getGoogleTagEvents')) {
                     $this->getCurrentController()->getGoogleTagEvents($aGoogleTagEvents);
                 }
