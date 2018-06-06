@@ -215,7 +215,7 @@ class WeaTracker
             // Econda emos3 tracking.
             if ($this->oConfig->getConfigParam('wea_tracker_emos_active') && $this->getEmosFilePath()) {
                 // Generate js script.
-                $sScript .= '<script>if( typeof(window.emos3) === "undefined" ) { window.emos3 = { stored : [], send : function(p){this.stored.push(p);} }; }</script>';
+                $sScript .= '<script>window.emos3 = { stored : [], send : function(p){this.stored.push(p);} };</script>';
                 $sScript .= '<script src="' . $this->getEmosFilePath() . '" async="async"></script>';
                 // Main script.
                 $sScript .= '<script>try{';
