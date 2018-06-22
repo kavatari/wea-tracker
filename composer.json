@@ -1,6 +1,7 @@
 {
   "name": "wea/wea-tracker",
   "description": "Econda emos tracking module for oxid esales (CE, PE and EE).",
+  "version": "1.0.0",
   "type": "oxideshop-module",
   "keywords": [
     "oxid",
