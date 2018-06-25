@@ -15,7 +15,7 @@ Using the backend you can configure some settings.
 ### Module installation via composer
 In order to install this module using composer run the following command in your shop base directory where the shop's composer.json is placed.
 ```
-composer require wea/wea-tracker:dev-master
+composer require wea/wea-tracker
 ```
 
 ### Setup
