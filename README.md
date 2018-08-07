@@ -3,7 +3,7 @@ OXID Tracker by WEA IT-Solutions
 
 ![WEA IT-Solutions OXID Tracker](wea-it-solutions.png)
 
-This is an oxid 6 module implementing [econda](https://www.econda.de) tracking (emos3).
+This is an oxid 6 module implementing [econda](https://www.econda.de) tracking (emos3) and google tracking.
 ### Module settings and possibilities
 Using the backend you can configure some settings. 
 * GDPR settings to Opt-in or Opt-out for econda tracking.
