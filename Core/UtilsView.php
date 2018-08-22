@@ -51,7 +51,7 @@ class UtilsView extends UtilsView_parent
     {
         $oConfig = Registry::getConfig();
         if ($oConfig->getConfigParam('wea_tracker_emos_active') == true
-            || $oConfig->getConfigParam('wea_tracker_gtag_active' == true)) {
+            || $oConfig->getConfigParam('wea_tracker_gtag_active') == true) {
             /* @var WeaTracker */
             $oTracker = Registry::get(\WeaItSolutions\Oxid\WeaTracker\Model\WeaTracker::class);
             return $oTracker->getCode($params, $smarty);
